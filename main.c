@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 
-#define ROUTERS_COUNTS 3
+#define ROTORS_COUNTS 5
 #define NUMBER_OF_RINGS 5
 #define ESC 27
 #define ALPHABET_LENGTH 26
@@ -11,35 +11,191 @@
 struct PlugBoardConnection {
     char from;
     char to;
+} plugBoardConnections[13];
+
+char map[ROTORS_COUNTS][ALPHABET_LENGTH][2] = {
+        {
+                {'a', 'e'},
+                {'b', 'k'},
+                {'c', 'w'},
+                {'d', 'f'},
+                {'e', 'l'},
+                {'f', 'g'},
+                {'g', 'd'},
+                {'h', 'q'},
+                {'i', 'v'},
+                {'j', 'z'},
+                {'k', 'n'},
+                {'l', 't'},
+                {'m', 'o'},
+                {'n', 'w'},
+                {'o', 'y'},
+                {'p', 'h'},
+                {'q', 'x'},
+                {'r', 'u'},
+                {'s', 's'},
+                {'t', 'p'},
+                {'u', 'a'},
+                {'v', 'i'},
+                {'w', 'b'},
+                {'x', 'r'},
+                {'y', 'c'},
+                {'z', 'y'}
+        },
+        {
+                {'a', 'a'},
+                {'b', 'j'},
+                {'c', 'd'},
+                {'d', 'k'},
+                {'e', 's'},
+                {'f', 'i'},
+                {'g', 'r'},
+                {'h', 'u'},
+                {'i', 'x'},
+                {'j', 'b'},
+                {'k', 'l'},
+                {'l', 'h'},
+                {'m', 'w'},
+                {'n', 't'},
+                {'o', 'm'},
+                {'p', 'c'},
+                {'q', 'q'},
+                {'r', 'g'},
+                {'s', 'z'},
+                {'t', 'n'},
+                {'u', 'p'},
+                {'v', 'y'},
+                {'w', 'f'},
+                {'x', 'v'},
+                {'y', 'o'},
+                {'z', 'e'}
+        },
+        {
+                {'a', 'b'},
+                {'b', 'd'},
+                {'c', 'f'},
+                {'d', 'h'},
+                {'e', 'j'},
+                {'f', 'l'},
+                {'g', 'c'},
+                {'h', 'p'},
+                {'i', 'r'},
+                {'j', 't'},
+                {'k', 'x'},
+                {'l', 'v'},
+                {'m', 'z'},
+                {'n', 'n'},
+                {'o', 'y'},
+                {'p', 'e'},
+                {'q', 'i'},
+                {'r', 'w'},
+                {'s', 'g'},
+                {'t', 'a'},
+                {'u', 'k'},
+                {'v', 'm'},
+                {'w', 'u'},
+                {'x', 's'},
+                {'y', 'q'},
+                {'z', 'o'}
+        },
+        {
+                {'a', 'e'},
+                {'b', 's'},
+                {'c', 'o'},
+                {'d', 'v'},
+                {'e', 'p'},
+                {'f', 'z'},
+                {'g', 'j'},
+                {'h', 'a'},
+                {'i', 'y'},
+                {'j', 'q'},
+                {'k', 'u'},
+                {'l', 'i'},
+                {'m', 'r'},
+                {'n', 'h'},
+                {'o', 'x'},
+                {'p', 'l'},
+                {'q', 'n'},
+                {'r', 'f'},
+                {'s', 't'},
+                {'t', 'g'},
+                {'u', 'k'},
+                {'v', 'd'},
+                {'w', 'c'},
+                {'x', 'm'},
+                {'y', 'w'},
+                {'z', 'b'}
+        },
+        {
+                {'a', 'v'},
+                {'b', 'z'},
+                {'c', 'b'},
+                {'d', 'r'},
+                {'e', 'g'},
+                {'f', 'i'},
+                {'g', 't'},
+                {'h', 'y'},
+                {'i', 'u'},
+                {'j', 'p'},
+                {'k', 's'},
+                {'l', 'd'},
+                {'m', 'n'},
+                {'n', 'h'},
+                {'o', 'l'},
+                {'p', 'x'},
+                {'q', 'a'},
+                {'r', 'w'},
+                {'s', 'm'},
+                {'t', 'j'},
+                {'u', 'q'},
+                {'v', 'o'},
+                {'w', 'f'},
+                {'x', 'e'},
+                {'y', 'c'},
+                {'z', 'k'}
+        }
 };
 
-char map[ALPHABET_LENGTH][2] = {
-        {'a', 'd'},
-        {'b', 'b'},
-        {'c', 'e'},
-        {'d', 'f'},
-        {'e', 'g'},
-        {'f', 'h'},
-        {'g', 'i'},
-        {'h', 'j'},
-        {'i', 'm'},
-        {'j', 'n'},
-        {'k', 'p'},
-        {'l', 'o'},
-        {'m', 'v'},
-        {'n', 'w'},
-        {'o', 'z'},
-        {'p', 'y'},
-        {'q', 'k'},
-        {'r', 'a'},
-        {'s', 'r'},
-        {'t', 'l'},
-        {'u', 's'},
-        {'v', 'o'},
-        {'w', 'u'},
-        {'x', 't'},
-        {'y', 'x'},
-        {'z', 'q'}
+char reflectorMap[ALPHABET_LENGTH][2] = {
+        {'a', 'y'},
+        {'b', 'r'},
+        {'c', 'u'},
+        {'d', 'h'},
+        {'e', 'q'},
+        {'f', 's'},
+        {'g', 'l'},
+        {'h', 'd'},
+        {'i', 'p'},
+        {'j', 'x'},
+        {'k', 'n'},
+        {'l', 'g'},
+        {'m', 'o'},
+        {'n', 'k'},
+        {'o', 'm'},
+        {'p', 'i'},
+        {'q', 'e'},
+        {'r', 'b'},
+        {'s', 'f'},
+        {'t', 'z'},
+        {'u', 'c'},
+        {'v', 'w'},
+        {'w', 'v'},
+        {'x', 'j'},
+        {'y', 'a'},
+        {'z', 't'}
+};
+
+int rotorSettings[ROTORS_COUNTS] = {
+        4,
+        5,
+        2,
+        1,
+        1,
+};
+
+char plugBoardSettings[ALPHABET_LENGTH / 2][2] = {
+        {'a', 'b'},
+        {'v', 'h'}
 };
 
 
@@ -47,16 +203,16 @@ struct Rotor {
     int id;
     int rings;
     char map[ALPHABET_LENGTH][2];
-} rotors[ROUTERS_COUNTS], reflector;
+} rotors[ROTORS_COUNTS], reflector;
 
 
 /**
- * Get mapped index
+ * Get mapped index for alphabet
  * @param rotor
  * @param value
  * @return
  */
-int getRotorMap(struct Rotor *rotor, char value) {
+int getRotorMapAlphabet(struct Rotor *rotor, char value) {
     for (int index = 0; index < ALPHABET_LENGTH; index++) {
         if (rotor->map[index][0] == value) {
             return index;
@@ -66,29 +222,75 @@ int getRotorMap(struct Rotor *rotor, char value) {
 }
 
 /**
+ * Get mapped index wiring
+ * @param rotor
+ * @param value
+ * @return
+ */
+int getRotorMapWiring(struct Rotor *rotor, char value) {
+    for (int index = 0; index < ALPHABET_LENGTH; index++) {
+        if (rotor->map[index][1] == value) {
+            return index;
+        }
+    }
+    return -1;
+}
+
+/**
+ * Checks if certain character has plug board connection.
+ * If it does, return the index of a character it is connected to
+ * @param rotor
+ * @param value
+ * @return
+ */
+int getPlugBoardSettingForCharacter(struct Rotor *rotor, char value) {
+    int lookupIndex = -1;
+    char charToMap = '\0';
+
+    for (int index = 0; index < ALPHABET_LENGTH / 2; index++) {
+        if (plugBoardSettings[index][0] == value) {
+            charToMap = plugBoardSettings[index][1];
+        }
+    }
+
+    if (charToMap == '\0') {
+        return lookupIndex;
+    }
+
+    for (int index = 0; index < ALPHABET_LENGTH; index++) {
+        if (rotor->map[index][1] == charToMap) {
+            lookupIndex = index;
+        }
+    }
+
+    return lookupIndex;
+}
+
+
+/**
  * Sets routers array
  * @return void
  */
 void setRotorsAndReflector() {
-    for (int index = 0; index < ROUTERS_COUNTS; index++) {
+    for (int index = 0; index < ROTORS_COUNTS; index++) {
         struct Rotor *curr = &rotors[index];
 
         curr->id = index;
-        curr->rings = 1;
+        curr->rings = rotorSettings[index];
 
         // Assign map to each rotor's map
         for (int i = 0; i < ALPHABET_LENGTH; i++) {
-            curr->map[i][0] = map[i][0];
-            curr->map[i][1] = map[i][1];
+            curr->map[i][0] = map[index][i][0];
+            curr->map[i][1] = map[index][i][1];
         }
     }
 
     struct Rotor *reflectorPointer = &reflector;
     reflectorPointer->id = -1;
     reflectorPointer->rings = -1;
-    for (int i = 0; i < ALPHABET_LENGTH; i++) {
-        reflectorPointer->map[i][0] = map[i][0];
-        reflectorPointer->map[i][1] = map[i][1];
+    for (int index = 0; index < ALPHABET_LENGTH; index++) {
+        reflectorPointer->map[index][0] = reflectorMap[index][0];
+        reflectorPointer->map[index][1] = reflectorMap[index][1];
     }
 };
 
@@ -98,7 +300,7 @@ void setRotorsAndReflector() {
  * @return Rotor
  */
 struct Rotor *getRotorById(int index) {
-    if (index >= ROUTERS_COUNTS || index < 0) {
+    if (index >= ROTORS_COUNTS || index < 0) {
         fprintf(stderr, "Index is out of bound!");
         exit(EXIT_FAILURE);
     }
@@ -106,17 +308,17 @@ struct Rotor *getRotorById(int index) {
 }
 
 void shiftMap(struct Rotor *rotor) {
-    char lastChar = rotor->map[ALPHABET_LENGTH - 1][1];
+    char lastChar = rotor->map[ALPHABET_LENGTH - 1][0];
 
-    char temp = rotor->map[0][1];
+    char temp = rotor->map[0][0];
     for (int index = 0; index < ALPHABET_LENGTH - 1; index++) {
-        char nextTemp = rotor->map[index + 1][1];
-        rotor->map[index + 1][1] = temp;
+        char nextTemp = rotor->map[index + 1][0];
+        rotor->map[index + 1][0] = temp;
         temp = nextTemp;
     }
 
     // Writes last character to the first one
-    rotor->map[0][1] = lastChar;
+    rotor->map[0][0] = lastChar;
 }
 
 /**
@@ -124,7 +326,7 @@ void shiftMap(struct Rotor *rotor) {
  */
 void inputHandler() {
     // Iterate over each router
-    for (int index = 0; index < ROUTERS_COUNTS - 1; index++) {
+    for (int index = 0; index < ROTORS_COUNTS - 1; index++) {
         struct Rotor *curr = getRotorById(index);
         struct Rotor *nextRotor = getRotorById(index + 1);
 
@@ -158,19 +360,27 @@ char encode(char entry) {
     char currentEntry = entry;
 
     // First pass through
-    for (int index = 0; index < ROUTERS_COUNTS; index++) {
+    for (int index = 0; index < ROTORS_COUNTS; index++) {
         struct Rotor *curr = getRotorById(index);
-        currentEntry = curr->map[getRotorMap(curr, currentEntry)][1];
+        int mappedCharIndex = getPlugBoardSettingForCharacter(curr, entry);
+
+
+        // Check for plug board re-wiring, if found it sets entry char to mapped char
+        if (index == 0 && mappedCharIndex != -1) {
+            currentEntry = curr->map[mappedCharIndex][0];
+        }
+
+        currentEntry = curr->map[getRotorMapWiring(curr, currentEntry)][0];
     }
 
     // Reflector
     struct Rotor *reflectorPointer = &reflector;
-    currentEntry = reflectorPointer->map[getRotorMap(reflectorPointer, currentEntry)][1];
+    currentEntry = reflectorPointer->map[getRotorMapWiring(reflectorPointer, currentEntry)][0];
 
-    // First pass through
-    for (int index = ROUTERS_COUNTS - 1; index >= 0; index--) {
+    // back pass through
+    for (int index = ROTORS_COUNTS - 1; index >= 0; index--) {
         struct Rotor *curr = getRotorById(index);
-        currentEntry = curr->map[getRotorMap(curr, currentEntry)][1];
+        currentEntry = curr->map[getRotorMapAlphabet(curr, currentEntry)][1];
     }
 
     return currentEntry;
