@@ -13,6 +13,35 @@ struct PlugBoardConnection {
     char to;
 } plugBoardConnections[13];
 
+char alphabet[ALPHABET_LENGTH] = {
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f',
+        'g',
+        'h',
+        'i',
+        'j',
+        'k',
+        'l',
+        'm',
+        'n',
+        'o',
+        'p',
+        'q',
+        'r',
+        's',
+        't',
+        'u',
+        'v',
+        'w',
+        'x',
+        'y',
+        'z'
+};
+
 char map[ROTORS_COUNTS][ALPHABET_LENGTH][2] = {
         {
                 {'a', 'e'},
@@ -193,11 +222,6 @@ int rotorSettings[ROTORS_COUNTS] = {
         1,
 };
 
-char plugBoardSettings[ALPHABET_LENGTH / 2][2] = {
-        {'a', 'b'},
-        {'v', 'h'}
-};
-
 
 struct Rotor {
     int id;
@@ -227,7 +251,7 @@ int getRotorMapAlphabet(struct Rotor *rotor, char value) {
  * @param value
  * @return
  */
-int getRotorMapWiring(struct Rotor *rotor, char value) {
+int getRotorMapWiring(struct Rotor *rotor, int value) {
     for (int index = 0; index < ALPHABET_LENGTH; index++) {
         if (rotor->map[index][1] == value) {
             return index;
@@ -236,36 +260,14 @@ int getRotorMapWiring(struct Rotor *rotor, char value) {
     return -1;
 }
 
-/**
- * Checks if certain character has plug board connection.
- * If it does, return the index of a character it is connected to
- * @param rotor
- * @param value
- * @return
- */
-int getPlugBoardSettingForCharacter(struct Rotor *rotor, char value) {
-    int lookupIndex = -1;
-    char charToMap = '\0';
-
-    for (int index = 0; index < ALPHABET_LENGTH / 2; index++) {
-        if (plugBoardSettings[index][0] == value) {
-            charToMap = plugBoardSettings[index][1];
-        }
-    }
-
-    if (charToMap == '\0') {
-        return lookupIndex;
-    }
-
+int getAlphabetCharIndex(char entry) {
     for (int index = 0; index < ALPHABET_LENGTH; index++) {
-        if (rotor->map[index][1] == charToMap) {
-            lookupIndex = index;
+        if (alphabet[index] == entry) {
+            return index;
         }
     }
-
-    return lookupIndex;
+    return -1;
 }
-
 
 /**
  * Sets routers array
@@ -357,34 +359,44 @@ void inputHandler() {
  * @return
  */
 char encode(char entry) {
-    char currentEntry = entry;
+    int currentEntryIndex = getAlphabetCharIndex(entry);
 
     // First pass through
     for (int index = 0; index < ROTORS_COUNTS; index++) {
         struct Rotor *curr = getRotorById(index);
-        int mappedCharIndex = getPlugBoardSettingForCharacter(curr, entry);
+        char value = curr->map[currentEntryIndex][1];
 
-
-        // Check for plug board re-wiring, if found it sets entry char to mapped char
-        if (index == 0 && mappedCharIndex != -1) {
-            currentEntry = curr->map[mappedCharIndex][0];
-        }
-
-        currentEntry = curr->map[getRotorMapWiring(curr, currentEntry)][0];
+        currentEntryIndex = getAlphabetCharIndex(value);
     }
 
-    // Reflector
+    // Reflector logic
     struct Rotor *reflectorPointer = &reflector;
-    currentEntry = reflectorPointer->map[getRotorMapWiring(reflectorPointer, currentEntry)][0];
+    char value = reflectorPointer->map[currentEntryIndex][1];
 
-    // back pass through
+    for (int index = 0; index < ALPHABET_LENGTH; index++) {
+        if (reflectorPointer->map[index][0] == value) {
+            currentEntryIndex = index;
+            break;
+        }
+    }
+
+    // Back pass through
     for (int index = ROTORS_COUNTS - 1; index >= 0; index--) {
         struct Rotor *curr = getRotorById(index);
-        currentEntry = curr->map[getRotorMapAlphabet(curr, currentEntry)][1];
+        char backPassValue = curr->map[currentEntryIndex][0];
+
+        for(int backPassIndex = 0; backPassIndex < ALPHABET_LENGTH; backPassIndex++){
+            if(curr->map[backPassIndex][1] == backPassValue){
+                currentEntryIndex = backPassIndex;
+                break;
+            }
+        }
     }
 
-    return currentEntry;
+
+    // Check for plug board re-wiring, if found it sets entry char to mapped charreturn alphabet[currentEntryIndex];
 }
+
 
 int main() {
     // Variables
@@ -392,6 +404,8 @@ int main() {
 
     // Setup
     setRotorsAndReflector();
+
+    const bool FUNCTION_CODE = 1;
 
     // Main runtime
     while (runtime) {
@@ -406,6 +420,7 @@ int main() {
 
         printf("%c", encode(key));
         inputHandler();
+
     }
     return 0;
 }
